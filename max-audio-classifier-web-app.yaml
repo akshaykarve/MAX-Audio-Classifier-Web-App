@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: max-audio-classifier-web-app
+spec:
+  selector:
+    app: max-audio-classifier-web-app
+  ports:
+  - port: 8090
+    nodePort: 30001
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: max-audio-classifier-web-app
+  labels:
+    app: max-audio-classifier-web-app
+spec:
+  selector:
+    matchLabels:
+      app: max-audio-classifier-web-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: max-audio-classifier-web-app
+    spec:
+      containers:
+      - name: max-audio-classifier-web-app
+        #image: quay.io/codait/max-audio-classifier-web-app:latest
+        image: supaak/max-audio-classifier-web-app
+        ports:
+        - containerPort: 8090
+        env:
+        - name: DISABLE_WEB_APP
+          value: "false"
